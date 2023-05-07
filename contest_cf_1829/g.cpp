@@ -9,6 +9,7 @@ typedef int64_t ll;
 int a[2000][2000];
 int b[1000001];
 int c[1000001];
+int d[1000001];
 
 void precomp(){
 int i=1;
@@ -16,6 +17,7 @@ for (int j=0;j<2000;j++){
     for (int k=0;k<=j;k++){
         if (i>1000000) return;
         b[i]=k;
+        d[i]=-1;
         c[i]=j-k;
         a[k][j-k]=i++;
     }
@@ -23,30 +25,30 @@ for (int j=0;j<2000;j++){
 }
 }
 
-void msolve(long long i,set<long long>& nums,long long& ans){
+void msolve(long long i,long long& ans,int l){
     int x=b[i];
     int y=c[i];
-    nums.insert(i);
+    d[i]=l;
     ans += i*i;
     if (x>0){
-        if(!nums.count(a[x-1][y]))
-        msolve(a[x-1][y],nums,ans);
+        if(d[a[x-1][y]]!=l)
+        msolve(a[x-1][y],ans,l);
+
 
     }
     if (y>0){
-         if(!nums.count(a[x][y-1]))
-        msolve(a[x][y-1],nums,ans);
+        if(d[a[x][y-1]]!=l)
+        msolve(a[x][y-1],ans,l);
     }
     return;
 }
 
-void solve(){
+void solve(int a){
     long long n;
     cin >> n;
     set<long long> nums;
     long long ans=0;
-    msolve(n,nums,ans);
-    set<long long>::iterator itr;
+    msolve(n,ans,a);
     cout << ans<<endl;
    }
 int main(){
@@ -63,7 +65,7 @@ int main(){
 
     loop1(I,T){
 
-        solve();
+        solve(I);
         //cout<<"Case #"<<I<<": "<<ans<<"\n";
 
     }
